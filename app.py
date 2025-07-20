@@ -1,17 +1,19 @@
 from flask import Flask, request
-from twilio.twiml.messaging_response import MessagingResponse
+import os
 
 app = Flask(__name__)
 
-@app.route("/whatsapp", methods=["POST"])
-def reply():
-    msg = request.form.get('Body')
-    sender = request.form.get('From')
+@app.route('/', methods=['GET'])
+def home():
+    return "WhatsApp Auto Reply Bot is Running!"
 
-    reply = MessagingResponse()
-    reply.message(f"आपका मैसेज मिला: {msg}\nधन्यवाद! ✅")
-    return str(reply)
+@app.route('/', methods=['POST'])
+def whatsapp_reply():
+    incoming_msg = request.form.get('Body')
+    from_number = request.form.get('From')
+
+    response = f"आपने कहा: {incoming_msg}"
+    return f"<Response><Message>{response}</Message></Response>"
 
 if __name__ == "__main__":
     app.run()
-
